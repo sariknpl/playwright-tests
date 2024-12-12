@@ -96,18 +96,19 @@ for (const testCase of testCasesData) {
 
         // Locate columns and verify dashboard card is under correct column
         const columnLocator = await cardLocator.locator('xpath=..//..//preceding-sibling::h2');
-        const columnText = await columnLocator.textContent();
-        if (!columnText.includes(column)) {
+        const actualColumn = await columnLocator.textContent();
+	// Removing digit within parenthesis and whitspace To Do (1) >> To Do
+        if (actualColumn.split('(')[0].trim() != column) {
           throw new Error(`Dashboard card "${card}" not found in column "${column}"`);
         }
 
         // Retrieve tags present in each dashboard card
         const tagsLocator = await cardLocator.locator('xpath=..//span[contains(@class, "rounded-full")]');
-        const tagsText = await tagsLocator.allTextContents();
+        const actualTags = await tagsLocator.allTextContents();
 
         // Verify that the expected tag is included in the retrieved tags 
         tags.forEach(tag => {
-          if (!tagsText.includes(tag)) {
+          if (!actualTags.includes(tag)) {
             throw new Error(`Tag "${tag}" not found on the dashboard card "${card}"`);
           }
         });
